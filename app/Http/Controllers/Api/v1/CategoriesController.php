@@ -49,7 +49,6 @@ class CategoriesController extends Controller
                 "error" => "Invalid Data"
             ]);
         }
-
     }
     public function getCategoryByCode($code) : MyResource
     {

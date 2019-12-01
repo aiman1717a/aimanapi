@@ -33,7 +33,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  */
 Route::prefix('masterkids')->group(function() {
     Route::prefix('v1')->group(function(){
-
         /**
          * Admon Routes
          */
@@ -76,6 +75,7 @@ Route::prefix('masterkids')->group(function() {
             Route::post('', [ListingsController::class, 'store']);
             Route::get('', [ListingsController::class, 'index']);
             Route::get('paginate', [ListingsController::class, 'paginate']);
+            Route::get('{id}', [ListingsController::class, 'getListingById'])->where('id', '[0-9]+');
             Route::put('{id}/edit', [ListingsController::class, 'update'])->where('id', '[0-9]+');
             Route::put('{id}/edit/name', [ListingsController::class, 'updateName'])->where('id', '[0-9]+');
             Route::put('{id}/edit/price', [ListingsController::class, 'updatePrice'])->where('id', '[0-9]+');

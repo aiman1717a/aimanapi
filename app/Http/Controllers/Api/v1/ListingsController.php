@@ -41,8 +41,20 @@ class ListingsController extends Controller
             $product = Listings::all();
             return new MyResource($product);
         } catch (\Exception $exception){
-            return new MyResource(["error" => "Invalid Data"]);
+            return new MyResource(["error" => $exception->getMessage()]);
         }
+    }
+    public function getListingById($id) : MyResource
+    {
+        try{
+            $listing = Listings::whereId($id)->firstOrFail();
+            return new MyResource($listing);
+        } catch (\Exception | \Throwable $exception){
+            return new MyResource([
+                "error" => $exception->getMessage()
+            ]);
+        }
+
     }
     public function paginate() : MyResource{
         return new MyResource(Listings::query()->paginate());

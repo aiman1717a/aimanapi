@@ -51,8 +51,8 @@ class Listings extends Model
     ];
     protected $casts = [
         'id' => 'integer',
-        'name' => 'integer',
-        'price' => 'decimal',
+        'name' => 'string',
+        'price' => 'float',
         'description' => 'string',
         'status' => 'string',
         'category_id' => 'integer',
