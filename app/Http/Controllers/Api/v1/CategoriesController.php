@@ -13,10 +13,10 @@ use Illuminate\Validation\Rule;
 class CategoriesController extends Controller
 {
     private $my_error = "";
+    private $validation_rules = null;
 
     function __construct()
     {
-        global $my_error;
         $this->my_error = array(
             "create" => array(
                 "error" => "Data Creation Failed"
@@ -27,34 +27,37 @@ class CategoriesController extends Controller
             "update" => array(
                 "error" => "Update Failed"
             ),
-            "update2" => array(
-                "error" => "not be Updated"
-            ),
             "delete" => array(
                 "error" => "could not be Deleted"
             )
+        );
+        $this->validation_rules = array(
+            "id" => 'required|numeric|max:20',
+            "code" => 'required|string|max:50',
+            "slug" => 'required|string|max:100',
+            "name" => 'required|string|max:100',
+            "description" => 'nullable|string|max:200',
         );
     }
 
     public function store(Request $request) : MyResource
     {
-        global $my_error;
         try{
             $validated_data = $this->validate($request, [
-                'code' => 'required|string',
-                'slug' => 'required|string',
-                'name' => 'required|string',
-                'description' => 'nullable|string',
+                'code' => $this->validation_rules['code'],
+                'slug' => $this->validation_rules['slug'],
+                'name' => $this->validation_rules['name'],
+                'description' => $this->validation_rules['description'],
             ]);
             $category = Categories::query()->create($validated_data);
             return new MyResource($category);
         } catch (\Exception $exception){
-            return new MyResource(['error' => $exception->getMessage()]);
+            return new MyResource($this->my_error['create']);
         }
     }
+
     public function getCategories() : MyResource
     {
-        global $my_error;
         try{
             $categories = Categories::all();
             return new MyResource($categories);
@@ -62,11 +65,10 @@ class CategoriesController extends Controller
             return new MyResource($this->my_error['read']);
         }
     }
-    public function getCategoryById($id)
+    public function getCategoryById($id) : MyResource
     {
-        global $my_error;
         try{
-            $category = Categories::whereId($id)->firstOrFail();
+            $category = Categories::whereId($id)->first();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
             return new MyResource($this->my_error['read']);
@@ -74,33 +76,27 @@ class CategoriesController extends Controller
     }
     public function getCategoryByCode($code) : MyResource
     {
-        global $my_error;
         try{
-            $category = Categories::whereCode($code)->firstOrFail();
+            $category = Categories::whereCode($code)->first();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
             return new MyResource($this->my_error['read']);
         }
     }
+
     public function update(Request $request, $id)
     {
-        global $my_error;
         try{
             $validated_data = $this->validate($request, [
-                'code' => 'required|string',
-                'name' => 'required|string',
-                'description' => 'nullable|string',
+                'code' => $this->validation_rules['code'],
+                'slug' => $this->validation_rules['slug'],
+                'name' => $this->validation_rules['name'],
+                'description' => $this->validation_rules['description'],
             ]);
             $category = Categories::findOrFail($id);
             $category->update($validated_data);
             $category->saveOrFail();
-            $data =  array(
-                'code' => $category->code,
-                'name' => $category->name,
-                'description' => $category->description,
-                'updated_at' => $category->updated_at,
-            );
-            return new MyResource($data);
+            return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
             return new MyResource($this->my_error['update']);
         }
@@ -109,44 +105,45 @@ class CategoriesController extends Controller
     {
         try{
             $validated_data = $this->validate($request, [
-                'code' => 'required|string',
+                'code' => $this->validation_rules['code']
             ]);
             $category = Categories::query()->findOrFail($id);
             $category->code = $validated_data['code'];
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource('Code' . $this->my_error['update2']);
+            return new MyResource($this->my_error['update']);
         }
     }
     public function updateName($id, Request $request) : MyResource
     {
         try{
             $validated_data = $this->validate($request, [
-                'name' => 'required|string',
+                'name' => $this->validation_rules['name']
             ]);
             $category = Categories::query()->findOrFail($id);
             $category->name = $validated_data['name'];
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource('Name' . $this->my_error['update2']);
+            return new MyResource($this->my_error['update']);
         }
     }
     public function updateDescription($id, Request $request) : MyResource
     {
         try{
             $validated_data = $this->validate($request, [
-                'description' => 'required|string',
+                'description' => $this->validation_rules['description']
             ]);
             $category = Categories::query()->findOrFail($id);
             $category->description = $validated_data['description'];
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource('Description' . $this->my_error['update2']);
+            return new MyResource($this->my_error['update']);
         }
     }
+
     public function destroy($id)
     {
         $now = new DateTime();

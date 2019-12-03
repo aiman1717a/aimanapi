@@ -20,7 +20,6 @@ class AttributesController extends Controller
 
     function __construct()
     {
-        global $my_error;
         $this->my_error = array(
             "create" => array(
                 "error" => "Attribute not created"
@@ -31,11 +30,8 @@ class AttributesController extends Controller
             "update" => array(
                 "error" => "Update Failed"
             ),
-            "update2" => array(
-                "error" => "not be Updated"
-            ),
             "delete" => array(
-                "error" => "could not be Deleted"
+                "error" => "Data deleted"
             )
         );
     }
@@ -107,8 +103,8 @@ class AttributesController extends Controller
     public function getAttributeById($id) : MyResource
     {
         try{
-            $listing = Attributes::whereId($id)->firstOrFail();
-            return new MyResource($listing);
+            $attribute = Attributes::whereId($id)->firstOrFail();
+            return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception){
             return new MyResource($this->my_error['read']);
         }
@@ -116,8 +112,8 @@ class AttributesController extends Controller
     public function getAttributeByName($name) : MyResource
     {
         try{
-            $listing = Listings::query()->whereId($name)->firstOrFail();
-            return new MyResource($listing);
+            $attribute = Attributes::query()->where('name', $name)->firstOrFail();
+            return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception){
             return new MyResource($this->my_error['read']);
         }
@@ -176,22 +172,18 @@ class AttributesController extends Controller
 
     }
     public function destroy($id){
-        global $my_error;
         $now = new DateTime();
         try {
             $attribute = Attributes::query()->findOrFail($id);
-            if($attribute != null){
-                $attribute->delete();
-                $attribute->saveOrFail();
-                $attribute =  array(
-                    'id' => $attribute->id,
-                    'deleted_at' =>  $now->getTimestamp()
-                );
-                return new MyResource($attribute);
-            }
-            return new MyResource(null);
+            $attribute->delete();
+            $attribute->saveOrFail();
+            $attribute =  array(
+                'id' => $attribute->id,
+                'deleted_at' =>  $now->getTimestamp()
+            );
+            return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource('Attribute' . $this->my_error['delete']);
+            return new MyResource($this->my_error['delete']);
         }
     }
 }

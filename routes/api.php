@@ -37,28 +37,28 @@ Route::prefix('masterkids')->group(function() {
         /**
          * Admin Routes
          */
-        Route::prefix('admin')->group(function() {
-            //CREATE
-            Route::post('login', [EmployeesController::class, 'login']);
-            Route::post('', [EmployeesController::class, 'register']);
-
-            //READ
-            Route::get('', [EmployeesController::class, 'getEmployees']);
-            Route::get('{id}', [EmployeesController::class, 'getEmployeeById'])->where('id', '[0-9]+');
-            Route::get('{type}', [EmployeesController::class, 'getEmployeesByType'])->where('name', '[A-Za-z]+');
-
-            //UPDATE
-            Route::put('{id}', [EmployeesController::class, 'update'])->where('id', '[0-9]+');
-            Route::put('{id}/name', [EmployeesController::class, 'updateName'])->where('id', '[0-9]+');
-            Route::put('{id}/password', [EmployeesController::class, 'updatePassword'])->where('id', '[0-9]+');
-            Route::put('{id}/email', [EmployeesController::class, 'updateEmail'])->where('id', '[0-9]+');
-            Route::put('{id}/type', [EmployeesController::class, 'updateType'])->where('id', '[0-9]+');
-            Route::put('{id}/status', [EmployeesController::class, 'updateStatus'])->where('id', '[0-9]+');
-
-            //DELETE
-            Route::delete('{id}', [EmployeesController::class, 'destroy'])->where('id', '[0-9]+');
-            Route::delete('all', [EmployeesController::class, 'destroyAll']);
-        });
+//        Route::prefix('admin')->group(function() {
+//            //CREATE
+//            Route::post('login', [EmployeesController::class, 'login']);
+//            Route::post('', [EmployeesController::class, 'register']);
+//
+//            //READ
+//            Route::get('', [EmployeesController::class, 'getEmployees']);
+//            Route::get('{id}', [EmployeesController::class, 'getEmployeeById'])->where('id', '[0-9]+');
+//            Route::get('{type}', [EmployeesController::class, 'getEmployeesByType'])->where('name', '[A-Za-z]+');
+//
+//            //UPDATE
+//            Route::put('{id}', [EmployeesController::class, 'update'])->where('id', '[0-9]+');
+//            Route::put('{id}/name', [EmployeesController::class, 'updateName'])->where('id', '[0-9]+');
+//            Route::put('{id}/password', [EmployeesController::class, 'updatePassword'])->where('id', '[0-9]+');
+//            Route::put('{id}/email', [EmployeesController::class, 'updateEmail'])->where('id', '[0-9]+');
+//            Route::put('{id}/type', [EmployeesController::class, 'updateType'])->where('id', '[0-9]+');
+//            Route::put('{id}/status', [EmployeesController::class, 'updateStatus'])->where('id', '[0-9]+');
+//
+//            //DELETE
+//            Route::delete('{id}', [EmployeesController::class, 'destroy'])->where('id', '[0-9]+');
+//            Route::delete('all', [EmployeesController::class, 'destroyAll']);
+//        });
 
         /**
          * Categories Routes
@@ -69,7 +69,6 @@ Route::prefix('masterkids')->group(function() {
 
             //READ
             Route::get('', [CategoriesController::class, 'getCategories']);
-            Route::get('paginate', [CategoriesController::class, 'paginate']);
             Route::get('{id}', [CategoriesController::class, 'getCategoryById'])->where('id', '[0-9]+');
             Route::get('code/{code}', [CategoriesController::class, 'getCategoryByCode'])->where('code', '[0-9a-zA-z]+');
 
@@ -118,7 +117,7 @@ Route::prefix('masterkids')->group(function() {
             //READ
             Route::get('', [AttributesController::class, 'getAttributes']);
             Route::get('{id}', [AttributesController::class, 'getAttributeById'])->where('id', '[0-9]+');
-            Route::get('{name}', [AttributesController::class, 'getAttributeByName'])->where('name', '[0-9a-zA-z]+');
+            Route::get('name/{name}', [AttributesController::class, 'getAttributeByName'])->where('name', '[0-9a-zA-z]+');
 
             //UPDATE
             Route::put('{attribute_id}/name', [AttributesController::class, 'updateAttributeName'])->where('attribute_id', '[0-9]+');
