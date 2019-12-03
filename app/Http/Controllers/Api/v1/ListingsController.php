@@ -24,6 +24,7 @@ class ListingsController extends Controller
     {
         try{
             $validated_data = $this->validate($request, [
+                'category_id' => 'required|numeric',
                 'name' => 'required|string',
                 'price' => 'required|numeric',
                 'description' => 'nullable|string',
@@ -32,10 +33,11 @@ class ListingsController extends Controller
             $product = Listings::query()->create($validated_data);
             return new MyResource($product);
         } catch (\Exception $exception){
-            return new MyResource(["error" => "Invalid Data"]);
+//            return new MyResource(["error" => "Invalid Data"]);
+            return new MyResource(["error" => $exception->getMessage()]);
         }
     }
-    public function index() : MyResource
+    public function getListings() : MyResource
     {
         try{
             $product = Listings::all();

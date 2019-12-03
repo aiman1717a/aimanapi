@@ -13,12 +13,12 @@ class CreateEmployeesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_CONNECTION_MASTERKIDS'))->create('employees', function (Blueprint $table) {
+        Schema::connection('masterkids_db')->create('employees', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
             $table->string('name', 100)->nullable(false);
             $table->string('password', 100)->nullable(false);
             $table->string('email', 100)->nullable(false)->unique();
-            $table->enum('type', ['Admin', 'Editors', 'Moderators'])->nullable(false)->default('Moderators');
+            $table->enum('type', ['Admin', 'Editors', 'Moderators'])->nullable(false)->default('Admin');
             $table->enum('status', ["Active", "InActive"])->nullable(false)->default('Active');
             $table->timestamps();
             $table->softDeletes();

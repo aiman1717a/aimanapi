@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Categories withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Categories withoutTrashed()
  * @mixin \Eloquent
+ * @property string $slug
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereSlug($value)
  */
 class Categories extends Model
 {
@@ -39,11 +41,13 @@ class Categories extends Model
     protected $table = 'categories';
     protected $fillable = [
         'code',
+        'slug',
         'name',
         'description',
     ];
     protected $casts = [
         'id' => 'integer',
+        'slug' => 'string',
         'code' => 'string',
         'name' => 'string',
         'description' => 'string',

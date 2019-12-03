@@ -11,8 +11,33 @@ use Illuminate\Validation\Rule;
 
 class StocksController extends Controller
 {
+    private $my_error = "";
+
+    function __construct()
+    {
+        global $my_error;
+        $this->my_error = array(
+            "create" => array(
+                "error" => "Data Creation Failed"
+            ),
+            "read" => array(
+                "error" => "Invalid Data"
+            ),
+            "update" => array(
+                "error" => "Update Failed"
+            ),
+            "update2" => array(
+                "error" => "not be Updated"
+            ),
+            "delete" => array(
+                "error" => "could not be Deleted"
+            )
+        );
+    }
+
     public function store(Request $request) : MyResource
     {
+        global $my_error;
         try{
             $validated_data = $this->validate($request, [
                 'listing_id' => 'required|numeric',
@@ -22,44 +47,42 @@ class StocksController extends Controller
             $stock = Stocks::query()->create($validated_data);
             return new MyResource($stock);
         } catch (\Exception $exception){
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource($this->my_error['create']);
         }
     }
-    public function getAllStock() : MyResource
+    public function getStocks() : MyResource
     {
+        global $my_error;
         try{
             $stocks = Stocks::all();
             return new MyResource($stocks);
         } catch (\Exception $exception){
-            return new MyResource([
-                "error" => "Invalid Data"
-            ]);
+            return new MyResource($this->my_error['read']);
         }
     }
     public function getStockById($id) : MyResource
     {
+        global $my_error;
         try{
             $stock = Stocks::whereId($id)->firstOrFail();
             return new MyResource($stock);
         } catch (\Exception $exception){
-            return new MyResource([
-                "error" => "Invalid Data"
-            ]);
+            return new MyResource($this->my_error['read']);
         }
     }
     public function getStockByListingId($id) : MyResource
     {
+        global $my_error;
         try{
             $stock = Stocks::whereListingId($id)->firstOrFail();
             return new MyResource($stock);
         } catch (\Exception $exception){
-            return new MyResource([
-                "error" => "Invalid Data"
-            ]);
+            return new MyResource($this->my_error['read']);
         }
     }
     public function update($id, Request $request) : MyResource
     {
+        global $my_error;
         try{
             $validated_data = $this->validate($request, [
                 'listing_id' => 'required|numeric',
@@ -71,13 +94,12 @@ class StocksController extends Controller
             $stock->saveOrFail();
             return new MyResource($stock);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource([
-                "error" =>$exception->getMessage()
-            ]);
+            return new MyResource($this->my_error['update']);
         }
     }
     public function updateQuantity($id, Request $request) : MyResource
     {
+        global $my_error;
         try{
             $validated_data = $this->validate($request, [
                 'quantity' => 'required|numeric',
@@ -87,29 +109,12 @@ class StocksController extends Controller
             $stock->saveOrFail();
             return new MyResource($stock);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource([
-                "error" => $exception->getMessage()
-            ]);
-        }
-    }
-    public function updateQuantityPerUnit($id, Request $request) : MyResource
-    {
-        try{
-            $validated_data = $this->validate($request, [
-                'quantity_per_unit' => 'required|numeric',
-            ]);
-            $stock = Stocks::query()->findOrFail($id);
-            $stock->quantity_per_unit = $validated_data['quantity_per_unit'];
-            $stock->saveOrFail();
-            return new MyResource($stock);
-        } catch (\Exception | \Throwable $exception){
-            return new MyResource([
-                "error" => $exception->getMessage()
-            ]);
+           return new MyResource('Quantity' . $this->my_error['update']);
         }
     }
     public function updateQuantityByListingId($id, Request $request) : MyResource
     {
+        global $my_error;
         try{
             $validated_data = $this->validate($request, [
                 'quantity' => 'required|string',
@@ -119,28 +124,11 @@ class StocksController extends Controller
             $stock->saveOrFail();
             return new MyResource($stock);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource([
-                "error" => $exception->getMessage()
-            ]);
-        }
-    }
-    public function updateQuantityPerUnitByListingId($id, Request $request) : MyResource
-    {
-        try{
-            $validated_data = $this->validate($request, [
-                'quantity_per_unit' => 'required|numeric',
-            ]);
-            $stock = Stocks::query()->findOrFail($id, 'listing_id');
-            $stock->quantity_per_unit = $validated_data['quantity_per_unit'];
-            $stock->saveOrFail();
-            return new MyResource($stock);
-        } catch (\Exception | \Throwable $exception){
-            return new MyResource([
-                "error" => $exception->getMessage()
-            ]);
+            return new MyResource('Quantity' . $this->my_error['update']);
         }
     }
     public function destroy($id){
+        global $my_error;
         $now = new DateTime();
         try {
             $stock = Stocks::query()->findOrFail($id);
@@ -155,10 +143,11 @@ class StocksController extends Controller
             }
             return new MyResource(null);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource(["error" => "Product is not available to be deleted"]);
+            return new MyResource('Stock' . $this->my_error['delete']);
         }
     }
     public function destroyByListingId($id){
+        global $my_error;
         $now = new DateTime();
         try {
             $stock = Stocks::whereListingId($id)->firstOrFail();
@@ -173,7 +162,7 @@ class StocksController extends Controller
             }
             return new MyResource(null);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource(["error" => "Product is not available to be deleted"]);
+            return new MyResource('Stock' . $this->my_error['delete']);
         }
     }
 }

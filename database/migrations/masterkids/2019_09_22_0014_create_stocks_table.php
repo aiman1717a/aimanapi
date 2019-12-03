@@ -17,7 +17,6 @@ class CreateStocksTable extends Migration
             $table->bigIncrements('id')->autoIncrement()->unsigned();
             $table->bigInteger('listing_id')->unsigned();
             $table->integer('quantity')->nullable(false)->default(1);
-            $table->integer('quantity_per_unit')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -16,7 +16,7 @@ class CreateListingImagesTable extends Migration
         Schema::connection('masterkids_db')->create('listing_images', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('listing_id')->unsigned();
-            $table->string('image', 200);
+            $table->string('image', 200)->nullable(false);
             $table->timestamps();
             $table->softDeletes();
         });

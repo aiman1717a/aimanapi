@@ -16,8 +16,9 @@ class CreateLogsTable extends Migration
         Schema::connection('masterkids_db')->create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('employee_id')->unsigned();
-            $table->string('action', 200);
+            $table->string('action', 200)->nullable(false);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::connection('masterkids_db')->table('logs', function(Blueprint $table) {

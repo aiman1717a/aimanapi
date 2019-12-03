@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentTable extends Migration
+class CreateInfoCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreatePaymentTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::connection('masterkids_db')->create('info_customers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('customer_id')->unsigned();
-            $table->enum('method', ["Cash", "Card"])->nullable(true);
+            $table->string('first_name', 50)->nullable(false);
+            $table->string('last_name', 50)->nullable(false);
+            $table->string('phone')->nullable(false);
             $table->timestamps();
-            $table->softDeletes();
         });
 
-        Schema::connection('masterkids_db')->table('payment', function(Blueprint $table) {
+        Schema::connection('masterkids_db')->table('info_customers', function(Blueprint $table) {
             $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
@@ -33,6 +34,6 @@ class CreatePaymentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment');
+        Schema::connection('masterkids_db')->dropIfExists('info_customers');
     }
 }

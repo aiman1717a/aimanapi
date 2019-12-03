@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::connection('masterkids_db')->create('categories', function (Blueprint $table) {
             $table->BigIncrements('id')->autoIncrement();
             $table->string('code', 50)->nullable(false);
+            $table->string('slug', 100)->nullable(false);
             $table->string('name', 100)->nullable(false);
             $table->string('description', 200)->nullable(true);
             $table->timestamps();

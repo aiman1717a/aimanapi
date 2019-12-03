@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttributeDateTimeValueTable extends Migration
+class CreateAttributesIntValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,20 @@ class CreateAttributeDateTimeValueTable extends Migration
      */
     public function up()
     {
-        Schema::connection('masterkids_db')->create('attribute_date_time_value', function (Blueprint $table) {
+        Schema::connection('masterkids_db')->create('attributes_int_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('attribute_id')->unsigned();
             $table->bigInteger('listing_id')->unsigned();
-            $table->dateTime('value');
+            $table->integer('value');
             $table->timestamps();
+            $table->softDeletes();
         });
 
-        Schema::connection('masterkids_db')->table('attribute_date_time_value', function(Blueprint $table) {
+        Schema::connection('masterkids_db')->table('attributes_int_values', function(Blueprint $table) {
             $table->foreign('attribute_id')->references('id')->on('attributes');
         });
 
-        Schema::connection('masterkids_db')->table('attribute_date_time_value', function(Blueprint $table) {
+        Schema::connection('masterkids_db')->table('attributes_int_values', function(Blueprint $table) {
             $table->foreign('listing_id')->references('id')->on('listings');
         });
     }
@@ -37,6 +38,6 @@ class CreateAttributeDateTimeValueTable extends Migration
      */
     public function down()
     {
-        Schema::connection('masterkids_db')->dropIfExists('attribute_date_time_value');
+        Schema::connection('masterkids_db')->dropIfExists('attribute_int_value');
     }
 }

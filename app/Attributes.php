@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Attributes withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributes withoutTrashed()
  * @mixin \Eloquent
+ * @property int|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributes whereDeletedAt($value)
  */
 class Attributes extends Model
 {

@@ -16,17 +16,17 @@ class CreateListingsTable extends Migration
     {
         Schema::connection('masterkids_db')->create('listings', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
+            $table->bigInteger('category_id')->unsigned();
             $table->string('name', 100)->nullable(false);
             $table->decimal('price')->nullable(false);
             $table->string('description', 200)->nullable(true);
             $table->enum('status', ["Active", "InActive"])->nullable(false)->default('InActive');
-            $table->bigInteger('category_id')->unsigned()->nullable(true);
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::connection('masterkids_db')->table('listings', function(Blueprint $table) {
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttributeIntValueTable extends Migration
+class CreateAttributesVarcharValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,20 @@ class CreateAttributeIntValueTable extends Migration
      */
     public function up()
     {
-        Schema::connection('masterkids_db')->create('attribute_int_value', function (Blueprint $table) {
+        Schema::connection('masterkids_db')->create('attributes_varchar_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('attribute_id')->unsigned();
             $table->bigInteger('listing_id')->unsigned();
-            $table->integer('value');
+            $table->string('value', 200);
             $table->timestamps();
+            $table->softDeletes();
         });
 
-        Schema::connection('masterkids_db')->table('attribute_int_value', function(Blueprint $table) {
+        Schema::connection('masterkids_db')->table('attributes_varchar_values', function(Blueprint $table) {
             $table->foreign('attribute_id')->references('id')->on('attributes');
         });
 
-        Schema::connection('masterkids_db')->table('attribute_int_value', function(Blueprint $table) {
+        Schema::connection('masterkids_db')->table('attributes_varchar_values', function(Blueprint $table) {
             $table->foreign('listing_id')->references('id')->on('listings');
         });
     }
@@ -37,6 +38,6 @@ class CreateAttributeIntValueTable extends Migration
      */
     public function down()
     {
-        Schema::connection('masterkids_db')->dropIfExists('attribute_int_value');
+        Schema::connection('masterkids_db')->dropIfExists('attribute_varchar_values');
     }
 }

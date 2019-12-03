@@ -34,6 +34,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Orders withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Orders withoutTrashed()
  * @mixin \Eloquent
+ * @property string $date
+ * @property float $total
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orders whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orders whereTotal($value)
  */
 class Orders extends Model
 {

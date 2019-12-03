@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Logs withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Logs withoutTrashed()
  * @mixin \Eloquent
+ * @property int|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Logs whereDeletedAt($value)
  */
 class Logs extends Model
 {

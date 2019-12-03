@@ -15,8 +15,9 @@ class CreateAttributesTable extends Migration
     {
         Schema::connection('masterkids_db')->create('attributes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable(false);
+            $table->string('name', 50)->nullable(false)->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

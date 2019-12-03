@@ -44,6 +44,7 @@ class Listings extends Model
     protected $connection = 'masterkids_db';
     protected $table = 'listings';
     protected $fillable = [
+        'category_id',
         'name',
         'price',
         'description',
@@ -51,11 +52,11 @@ class Listings extends Model
     ];
     protected $casts = [
         'id' => 'integer',
+        'category_id' => 'integer',
         'name' => 'string',
         'price' => 'float',
         'description' => 'string',
         'status' => 'string',
-        'category_id' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',

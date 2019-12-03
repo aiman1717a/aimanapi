@@ -31,6 +31,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderItems whereTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderItems whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\OrderItems onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\OrderItems withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\OrderItems withoutTrashed()
  */
 class OrderItems extends Model
 {
