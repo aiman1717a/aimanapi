@@ -48,6 +48,7 @@ class Listings extends Model
         'name',
         'price',
         'description',
+        'image',
         'status',
     ];
     protected $casts = [
@@ -56,6 +57,7 @@ class Listings extends Model
         'name' => 'string',
         'price' => 'float',
         'description' => 'string',
+        'image' => 'string',
         'status' => 'string',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',

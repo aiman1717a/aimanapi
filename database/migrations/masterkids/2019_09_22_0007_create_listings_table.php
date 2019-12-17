@@ -20,6 +20,7 @@ class CreateListingsTable extends Migration
             $table->string('name', 100)->nullable(false);
             $table->decimal('price')->nullable(false);
             $table->string('description', 200)->nullable(true);
+            $table->string('image', 200)->nullable(false);
             $table->enum('status', ["Active", "InActive"])->nullable(false)->default('InActive');
             $table->timestamps();
             $table->softDeletes();

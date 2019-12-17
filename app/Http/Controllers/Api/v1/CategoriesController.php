@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Categories;
+use App\CustomClass\Error;
 use App\Http\Resources\v1\MyResource;
+use App\Listings;
 use App\Stocks;
 use DateTime;
 use Illuminate\Http\Request;
@@ -12,25 +14,11 @@ use Illuminate\Validation\Rule;
 
 class CategoriesController extends Controller
 {
-    private $my_error = "";
+    private $error_class = null;
     private $validation_rules = null;
-
     function __construct()
     {
-        $this->my_error = array(
-            "create" => array(
-                "error" => "Data Creation Failed"
-            ),
-            "read" => array(
-                "error" => "Invalid Data"
-            ),
-            "update" => array(
-                "error" => "Update Failed"
-            ),
-            "delete" => array(
-                "error" => "could not be Deleted"
-            )
-        );
+        $this->error_class = new Error();
         $this->validation_rules = array(
             "id" => 'required|numeric|max:20',
             "code" => 'required|string|max:50',
@@ -39,7 +27,6 @@ class CategoriesController extends Controller
             "description" => 'nullable|string|max:200',
         );
     }
-
     public function store(Request $request) : MyResource
     {
         try{
@@ -52,17 +39,22 @@ class CategoriesController extends Controller
             $category = Categories::query()->create($validated_data);
             return new MyResource($category);
         } catch (\Exception $exception){
-            return new MyResource($this->my_error['create']);
+            return new MyResource([
+                    "error" => $this->error_class->printCreateError()
+                ]
+            );
         }
     }
-
     public function getCategories() : MyResource
     {
         try{
             $categories = Categories::all();
             return new MyResource($categories);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function getCategoryById($id) : MyResource
@@ -71,7 +63,30 @@ class CategoriesController extends Controller
             $category = Categories::whereId($id)->first();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
+        }
+    }
+    public function getCategoriesByIds(Request $request)
+    {
+        try{
+            $validated_data = $this->validate($request, [
+                'id' => 'required|array',
+//                'id.*'  => 'required|numeric',
+            ]);
+            $categories = null;
+            for ($i = 1; $i <= count($validated_data['id']); $i++){
+                $category = Categories::whereId($validated_data['id'][$i-1])->firstOrFail();;
+                $categories[] = $category;
+            }
+            return new MyResource($categories);
+        } catch (\Exception $exception){
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function getCategoryByCode($code) : MyResource
@@ -80,10 +95,12 @@ class CategoriesController extends Controller
             $category = Categories::whereCode($code)->first();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
-
     public function update(Request $request, $id)
     {
         try{
@@ -98,7 +115,10 @@ class CategoriesController extends Controller
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['update']);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateCode($id, Request $request) : MyResource
@@ -112,7 +132,27 @@ class CategoriesController extends Controller
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['update']);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
+        }
+    }
+    public function updateSlug($id, Request $request) : MyResource
+    {
+        try{
+            $validated_data = $this->validate($request, [
+                'slug' => $this->validation_rules['slug']
+            ]);
+            $category = Categories::query()->findOrFail($id);
+            $category->slug = $validated_data['slug'];
+            $category->saveOrFail();
+            return new MyResource($category);
+        } catch (\Exception | \Throwable $exception){
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateName($id, Request $request) : MyResource
@@ -126,7 +166,10 @@ class CategoriesController extends Controller
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['update']);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateDescription($id, Request $request) : MyResource
@@ -140,10 +183,12 @@ class CategoriesController extends Controller
             $category->saveOrFail();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['update']);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
-
     public function destroy($id)
     {
         $now = new DateTime();
@@ -157,7 +202,10 @@ class CategoriesController extends Controller
             );
             return new MyResource($data);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource('Category'. $this->my_error['delete']);
+            return new MyResource([
+                    "error" => $this->error_class->printDeleteError()
+                ]
+            );
         }
     }
     public function destroyAll()
@@ -179,7 +227,10 @@ class CategoriesController extends Controller
             }
             return new MyResource(null);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource('Categories'. $this->my_error['delete']);
+            return new MyResource([
+                    "error" => $this->error_class->printDeleteError()
+                ]
+            );
         }
     }
 }

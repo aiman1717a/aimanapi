@@ -70,13 +70,15 @@ Route::prefix('masterkids')->group(function() {
             //READ
             Route::get('', [CategoriesController::class, 'getCategories']);
             Route::get('{id}', [CategoriesController::class, 'getCategoryById'])->where('id', '[0-9]+');
+            Route::post('selected', [CategoriesController::class, 'getCategoriesByIds']);
             Route::get('code/{code}', [CategoriesController::class, 'getCategoryByCode'])->where('code', '[0-9a-zA-z]+');
 
             //UPDATE
-            Route::put('{id}', [CategoriesController::class, 'update'])->where('id', '[0-9]+');
-            Route::put('{id}/code', [CategoriesController::class, 'updateCode'])->where('id', '[0-9]+');
-            Route::put('{id}/name', [CategoriesController::class, 'updateName'])->where('id', '[0-9]+');
-            Route::put('{id}/description', [CategoriesController::class, 'updateDescription'])->where('id', '[0-9]+');
+            Route::put('{id}/edit', [CategoriesController::class, 'update'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/code', [CategoriesController::class, 'updateCode'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/slug', [CategoriesController::class, 'updateSlug'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/name', [CategoriesController::class, 'updateName'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/description', [CategoriesController::class, 'updateDescription'])->where('id', '[0-9]+');
 
             //DELETE
             Route::delete('{id}', [CategoriesController::class, 'destroy'])->where('id', '[0-9]+');
@@ -92,15 +94,17 @@ Route::prefix('masterkids')->group(function() {
 
             //READ
             Route::get('', [ListingsController::class, 'getListings']);
-            Route::get('paginate', [ListingsController::class, 'paginate']);
             Route::get('{id}', [ListingsController::class, 'getListingById'])->where('id', '[0-9]+');
-            Route::get('{id}/attribute', [ListingsController::class, 'getListingByIdWithAttributes'])->where('id', '[0-9]+');
+            Route::post('selected', [ListingsController::class, 'getListingsByIds']);
+            Route::get('paginate', [ListingsController::class, 'paginate']);
 
             //UPDATE
             Route::put('{id}/edit', [ListingsController::class, 'update'])->where('id', '[0-9]+');
             Route::put('{id}/edit/name', [ListingsController::class, 'updateName'])->where('id', '[0-9]+');
             Route::put('{id}/edit/price', [ListingsController::class, 'updatePrice'])->where('id', '[0-9]+');
             Route::put('{id}/edit/description', [ListingsController::class, 'updateDescription'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/image', [ListingsController::class, 'updateImage'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/status', [ListingsController::class, 'updateStatus'])->where('id', '[0-9]+');
 
             //DELETE
             Route::delete('{id}', [ListingsController::class, 'destroy'])->where('id', '[0-9]+');
@@ -140,13 +144,14 @@ Route::prefix('masterkids')->group(function() {
             Route::get('listing/{id}', [StocksController::class, 'getStockByListingId'])->where('id', '[0-9]+');
 
             //UPDATE
-            Route::put('{id}', [StocksController::class, 'update'])->where('id', '[0-9]+');
-            Route::put('{id}/quantity', [StocksController::class, 'updateQuantity'])->where('id', '[0-9]+');
-            Route::put('listing/{id}/quantity', [StocksController::class, 'updateQuantityByListingId'])->where('id', '[0-9]+');
+            Route::put('{id}/edit', [StocksController::class, 'update'])->where('id', '[0-9]+');
+            Route::put('{id}/edit/quantity', [StocksController::class, 'updateQuantity'])->where('id', '[0-9]+');
+            Route::put('listing/{id}/edit/quantity', [StocksController::class, 'updateQuantityByListingId'])->where('id', '[0-9]+');
 
             //DELETE
             Route::delete('{id}', [StocksController::class, 'destroy'])->where('id', '[0-9]+');
             Route::delete('listing/{id}', [StocksController::class, 'destroyByListingId'])->where('id', '[0-9]+');
+            Route::delete('/all', [StocksController::class, 'destroyAll'])->where('id', '[0-9]+');
         });
     });
 });

@@ -40,6 +40,7 @@ class AuthServiceProvider extends ServiceProvider
             'update' => 'This Application will be abe to Update Records',
             'delete' => 'This Application will be abe to Delete records',
         ]);
+//        Passport::cookie('aiman_cookie');
 //        Passport::$ignoreCsrfToken = true;
     }
 }

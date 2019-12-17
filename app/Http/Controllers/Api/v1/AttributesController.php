@@ -7,6 +7,7 @@ use App\AttributesDateTimeValues;
 use App\AttributesDecimalValues;
 use App\AttributesIntValues;
 use App\AttributesVarcharValues;
+use App\CustomClass\Error;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\MyResource;
 use App\Listings;
@@ -16,24 +17,9 @@ use Illuminate\Validation\Rule;
 
 class AttributesController extends Controller
 {
-    private $my_error = "";
-
-    function __construct()
-    {
-        $this->my_error = array(
-            "create" => array(
-                "error" => "Attribute not created"
-            ),
-            "read" => array(
-                "error" => "Data Not Found"
-            ),
-            "update" => array(
-                "error" => "Update Failed"
-            ),
-            "delete" => array(
-                "error" => "Data deleted"
-            )
-        );
+    private $error_class = null;
+    function __construct(){
+        $this->error_class = new Error();
     }
 
     public function store(Request $request) : MyResource
@@ -87,8 +73,10 @@ class AttributesController extends Controller
             }
             return new MyResource(['status' => 'Fucking Success']);
         } catch (\Exception $exception){
-            // return new MyResource($this->my_error['create']);
-            return new MyResource(['error' => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printCreateError()
+                ]
+            );
         }
     }
     public function getAttributes() : MyResource
@@ -97,7 +85,10 @@ class AttributesController extends Controller
             $attributes = Attributes::all();
             return new MyResource($attributes);
         } catch (\Exception $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function getAttributeById($id) : MyResource
@@ -106,7 +97,10 @@ class AttributesController extends Controller
             $attribute = Attributes::whereId($id)->firstOrFail();
             return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function getAttributeByName($name) : MyResource
@@ -115,7 +109,10 @@ class AttributesController extends Controller
             $attribute = Attributes::query()->where('name', $name)->firstOrFail();
             return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['read']);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function updateAttributeName($attribute_id, Request $request) : MyResource
@@ -129,7 +126,10 @@ class AttributesController extends Controller
             $attribute->saveOrFail();
             return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource(['error' => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateAttributeValue($value_id, Request $request) : MyResource
@@ -167,7 +167,10 @@ class AttributesController extends Controller
             $attributeValue->saveOrFail();
             return new MyResource($attributeValue);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource($this->my_error['update']);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
 
     }
@@ -183,7 +186,10 @@ class AttributesController extends Controller
             );
             return new MyResource($attribute);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource($this->my_error['delete']);
+            return new MyResource([
+                    "error" => $this->error_class->printDeleteError()
+                ]
+            );
         }
     }
 }

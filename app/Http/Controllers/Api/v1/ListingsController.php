@@ -10,17 +10,17 @@ use App\Http\Resources\v1\MyResource;
 use App\Listings;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
+use App\CustomClass\Error;
 
 class ListingsController extends Controller
 {
-    /**
-     * Create
-     *
-     * @param Request $request
-     * @return MyResource
-     */
-    public function store(Request $request) : MyResource
+    private $error_class = null;
+    function __construct(){
+        $this->error_class = new Error();
+    }
+    public function store(Request $request): MyResource
     {
         try{
             $validated_data = $this->validate($request, [
@@ -28,22 +28,49 @@ class ListingsController extends Controller
                 'name' => 'required|string',
                 'price' => 'required|numeric',
                 'description' => 'nullable|string',
-                'showcase' => ['nullable', Rule::in(['Active', 'InActive']),],
+                'image' => 'required|string',
+                'status' => ['nullable', Rule::in(['Active', 'InActive']),],
             ]);
             $product = Listings::query()->create($validated_data);
             return new MyResource($product);
         } catch (\Exception $exception){
-//            return new MyResource(["error" => "Invalid Data"]);
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printCreateError()
+                ]
+            );
         }
     }
-    public function getListings() : MyResource
+    public function getListings(): MyResource
     {
         try{
-            $product = Listings::all();
+            $limit = \request()->get('limit', 10);
+            $product = Listings::take($limit)->get();
             return new MyResource($product);
         } catch (\Exception $exception){
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
+        }
+    }
+    public function getListingsByIds(Request $request)
+    {
+        try{
+            $validated_data = $this->validate($request, [
+                'id' => 'required|array',
+//                'id.*'  => 'required|numeric',
+            ]);
+           $listings = null;
+            for ($i = 1; $i <= count($validated_data['id']); $i++){
+                $listing = Listings::whereId($validated_data['id'][$i-1])->firstOrFail();;
+                $listings[] = $listing;
+            }
+            return new MyResource($listings);
+        } catch (\Exception $exception){
+            return new MyResource([
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
     }
     public function getListingById($id) : MyResource
@@ -53,8 +80,9 @@ class ListingsController extends Controller
             return new MyResource($listing);
         } catch (\Exception | \Throwable $exception){
             return new MyResource([
-                "error" => $exception->getMessage()
-            ]);
+                    "error" => $this->error_class->printReadError()
+                ]
+            );
         }
 
     }
@@ -65,32 +93,38 @@ class ListingsController extends Controller
     {
         try{
             $validated_data = $this->validate($request, [
+                'category_id' => 'required|numeric',
                 'name' => 'nullable|string',
                 'price' => 'nullable|numeric',
                 'description' => 'nullable|string',
-                'has_attribute' => 'nullable|boolean',
-                'have_tags' => 'nullable|boolean',
-                'showcase' => ['nullable', Rule::in(['Active', 'InActive']),],
+                'image' => 'required|string',
+                'status' => ['nullable', Rule::in(['Active', 'InActive']),],
             ]);
             $product = Listings::query()->findOrFail($id);
             $product->update($validated_data);
             return new MyResource($product);
         } catch (\Exception $exception){
-            return new MyResource(["error" =>$exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateName($id, Request $request) : MyResource
     {
         try{
             $validated_data = $this->validate($request, [
-                'name' => 'nullable|string',
+                'name' => 'required|string',
             ]);
             $product = Listings::query()->findOrFail($id);
             $product->name = $validated_data['name'];
             $product->saveOrFail();
             return new MyResource($product);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updatePrice($id, Request $request) : MyResource
@@ -104,7 +138,10 @@ class ListingsController extends Controller
             $product->saveOrFail();
             return new MyResource($product);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function updateDescription($id, Request $request) : MyResource
@@ -118,7 +155,44 @@ class ListingsController extends Controller
             $product->saveOrFail();
             return new MyResource($product);
         } catch (\Exception | \Throwable $exception){
-            return new MyResource(["error" => $exception->getMessage()]);
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
+        }
+    }
+    public function updateImage($id, Request $request) : MyResource
+    {
+        try{
+            $validated_data = $this->validate($request, [
+                'image' => 'required|string',
+            ]);
+            $product = Listings::query()->findOrFail($id);
+            $product->image = $validated_data['image'];
+            $product->saveOrFail();
+            return new MyResource($product);
+        } catch (\Exception | \Throwable $exception){
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
+        }
+    }
+    public function updateStatus($id, Request $request) : MyResource
+    {
+        try{
+            $validated_data = $this->validate($request, [
+                'status' => 'required|string',
+            ]);
+            $product = Listings::query()->findOrFail($id);
+            $product->status = $validated_data['status'];
+            $product->saveOrFail();
+            return new MyResource($product);
+        } catch (\Exception | \Throwable $exception){
+            return new MyResource([
+                    "error" => $this->error_class->printUpdateError()
+                ]
+            );
         }
     }
     public function destroy($id){
@@ -136,7 +210,10 @@ class ListingsController extends Controller
             }
             return new MyResource(null);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource(["error" => "Product is not available to be deleted"]);
+            return new MyResource([
+                    "error" => $this->error_class->printDeleteError()
+                ]
+            );
         }
     }
     public function destroyAll(){
@@ -158,7 +235,10 @@ class ListingsController extends Controller
             }
             return new MyResource(null);
         } catch (\Exception | \Throwable $exception) {
-            return new MyResource(["error" => "All Products could not be deleted"]);
+            return new MyResource([
+                    "error" => $this->error_class->printDeleteError()
+                ]
+            );
         }
     }
 }

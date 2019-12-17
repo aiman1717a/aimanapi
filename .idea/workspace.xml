@@ -2,9 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d49e124a-6efd-48c1-aaaa-1859adbdb812" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/CustomClass/Error.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/masterkidsapi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/masterkidsapi.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/AttributesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/AttributesController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/CategoriesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/CategoriesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/ListingsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/ListingsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/StocksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/v1/StocksController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Listings.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Listings.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AuthServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AuthServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/masterkids/2019_09_22_0007_create_listings_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/masterkids/2019_09_22_0007_create_listings_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/ExampleComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/ExampleComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -134,6 +151,8 @@
       <path value="$PROJECT_DIR$/vendor/defuse/php-encryption" />
       <path value="$PROJECT_DIR$/vendor/symfony/psr-http-message-bridge" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/asm89/stack-cors" />
+      <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-cors" />
     </include_path>
   </component>
   <component name="ProjectId" id="1QmiVY2gcivOp9Zmu1Py19jJWGk" />
@@ -146,15 +165,15 @@
     <property name="settings.editor.selected.configurable" value="DockerRegistry" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\masterkids\public" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\aimanapi\public\storage\images" />
       <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\aimanapi\database\migrations\masterkids" />
       <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\aimanapi\database\migrations\oauth" />
       <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\masterkids\resources\js" />
       <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\masterkids\app\Http\Controllers\Api\v1" />
-      <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\masterkids\app\Http\Controllers" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\Aiman\Projects\laravel_websites\project_masterkids\masterkids\public" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -198,6 +217,9 @@
       <workItem from="1569823351979" duration="59652000" />
       <workItem from="1575380595572" duration="5532000" />
       <workItem from="1575395801176" duration="3495000" />
+      <workItem from="1575429814621" duration="38535000" />
+      <workItem from="1576308750555" duration="14470000" />
+      <workItem from="1576591169637" duration="8267000" />
     </task>
     <servers />
   </component>

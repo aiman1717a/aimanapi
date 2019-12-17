@@ -67,8 +67,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::domain('api.aimanapi.test')
-            ->middleware('api')
-            ->middleware('client')
+//            ->middleware('api')
+//            ->middleware('client')
             ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
     }
