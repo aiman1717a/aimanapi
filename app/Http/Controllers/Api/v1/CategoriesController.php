@@ -60,6 +60,7 @@ class CategoriesController extends Controller
     public function getCategoryById($id) : MyResource
     {
         try{
+            Categories::query()->where('id', $id)->first();
             $category = Categories::whereId($id)->first();
             return new MyResource($category);
         } catch (\Exception | \Throwable $exception){
